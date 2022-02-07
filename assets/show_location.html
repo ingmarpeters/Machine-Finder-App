@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <!--   See Using Zendesk Garden:
+      https://developer.zendesk.com/apps/docs/developer-guide/setup#using-zendesk-garden
+      https://garden.zendesk.com/css-components/bedrock/
+      https://garden.zendesk.com/css-components/utilities/typography/
+      src="https://www.openstreetmap.org/export/embed.html?bbox=-88.9887493439892%2C42.79982419865795%2C-88.97385771953851%2C42.80839631056348&amp;layer=mapnik" 
+
+    -->
+    <link
+     rel="stylesheet"
+     href="https://cdn.jsdelivr.net/combine/npm/@zendeskgarden/css-bedrock@7.0.21,npm/@zendeskgarden/css-utilities@4.3.0,npm/@zendeskgarden/css-forms@7.0.9,npm/@zendeskgarden/css-buttons@7.0.8,npm/@zendeskgarden/css-menus@9.0.9,npm/@zendeskgarden/css-tooltips@4.1.18,npm/@zendeskgarden/css-arrows@3.1.1"
+    />
+  </head>
+  <style>
+    .div_map{
+      width:100%;
+      height: 500px;
+      border: black;
+      border-width: 1px;
+      border-style: solid;
+    }
+
+    .locateBtn {
+      margin: 0;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      -ms-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+    }
+
+  </style>
+  <body>
+    <script>
+      function getLocation() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(CreateLink);
+        } else { 
+          console.debug("Geolocation is not supported by this browser.");
+        }
+      }
+
+      function CreateLink(position) {
+        var OSM_Link;
+        var OSM_LargView_Link;
+        const latoff = 0.005332
+        const longoff = 0.001893
+        
+        var lat = position.coords.latitude;
+        var long = position.coords.longitude;
+        var minlat = lat - latoff
+        var maxlat = lat + latoff
+        var minlong = long -longoff
+        var maxlong = long + longoff
+
+        OSM_Link = "https://www.openstreetmap.org/export/embed.html?" + 
+          "mlat=" + lat + 
+          "&mlon=" + long + 
+          "&bbox=" + 
+          minlong + "%2C" + minlat + "%2C" +
+          maxlong + "%2C" + maxlat + 
+          "&layer=mapnik" + "&marker=" +
+          lat + "%2C" + long; 
+
+        OSM_LargView_Link = "https://www.openstreetmap.org/?"+
+          "mlat=" + lat + 
+          "&mlon=" + long + 
+          "#map=19/" + lat + "/" + long 
+        
+        //Set html code
+        
+        code = `
+          <iframe 
+            width="100%"
+            height="100%"
+            frameborder="0" 
+            scrolling="no" 
+            marginheight="0" 
+            marginwidth="0" 
+            src="${OSM_Link}" 
+          >
+          </iframe>
+          <br/>
+          <small>
+            <a href="${OSM_LargView_Link}" target="_blank">View Larger Map</a>
+          </small>
+        `
+        document.getElementById("div_map").innerHTML = code;
+      }
+    </script>
+ 
+ <div class="w3-container w3-padding-small">
+    <div class="c-callout undefined undefined undefined">
+      <strong class="c-callout__title">
+        Location of your device!
+      </strong>
+    </div>
+
+    <div class="div_map w3-display-container" id="div_map">
+      <button 
+        class="c-btn c-btn--lg c-btn--primary is-hovered locateBtn"
+        onclick="getLocation()">
+        Locate Machine
+      </button>
+        
+    </div>
+  </body>
+</html>

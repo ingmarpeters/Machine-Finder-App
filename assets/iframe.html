@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <!--   See Using Zendesk Garden:
+    https://developer.zendesk.com/apps/docs/developer-guide/setup#using-zendesk-garden
+    https://garden.zendesk.com/css-components/bedrock/
+    https://garden.zendesk.com/css-components/utilities/typography/
+   -->
+  <link
+   rel="stylesheet"
+   href="https://cdn.jsdelivr.net/combine/npm/@zendeskgarden/css-bedrock@7.0.21,npm/@zendeskgarden/css-utilities@4.3.0,npm/@zendeskgarden/css-forms@7.0.9,npm/@zendeskgarden/css-buttons@7.0.8,npm/@zendeskgarden/css-menus@9.0.9,npm/@zendeskgarden/css-tooltips@4.1.18,npm/@zendeskgarden/css-arrows@3.1.1"
+  />
+  <link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/icon?family=Material+Icons"
+  />
+  <link 
+  rel="stylesheet" 
+  href="https://www.w3schools.com/w3css/4/w3.css"
+  />
+</head>
+<style>
+   .noMachine {
+    text-align: center;
+    color: red;
+    vertical-align: middle;
+    width: 75%;
+    margin-top: 50px;
+    margin-bottom: 30px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .noMachineSearch {
+    text-align: center;
+    color: #c7c7c7;
+    vertical-align: middle;
+    width: 75%;
+    margin-top: 50px;
+    margin-bottom: 30px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .MachinePlaceholder {
+    vertical-align: middle;
+    height: 310px;
+    width: 100%;
+    border: 1px;
+  }
+
+  .MachineDetailsTitle {
+    font-weight:bold;  
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  td {
+    padding: 4px 2px 2px 4px; 
+  }
+
+  .btn_center{
+    text-align: center;
+    border: 1px;
+  }
+  .div_buttons{
+    display: grid; 
+    grid-column-gap: 0px; 
+    position: fixed; 
+    bottom: 0; 
+    width: 100%;
+  }
+</style>
+<!-- grid-template-columns: minmax(7fr, auto) minmax(7fr, auto) 13px; -->
+<body>
+  <form class="l-wrapper--370" onsubmit="return false;">
+    <div class="w3-container w3-padding-small" style="display: grid; grid-column-gap: 0px;">
+      <!-- Define upper row of App -->
+      <div class="btn_center" style="grid-column-start: 1; grid-column-end: 4;">
+        <div class="c-txt__input c-txt__input--media">
+          <input
+            class="c-txt__input c-txt__input--bare "
+            id="search_term"
+            type="search"
+            placeholder="Machine Serial Number"
+          />
+        </div> 
+      </div>
+      <div class="btn_center" style="grid-column-start: 4; grid-column-end: 4;">
+        <button 
+          class="c-btn c-btn--icon undefined material-icons md-18"
+          id="btn_config"
+          onClick="searchObject()"
+          > 
+          search <!-- This us the icon name to show on button-->
+        </button> 
+      </div>   
+    </div>
+
+    <!-- Define empty body to show results -->
+    <div class="w3-container MachinePlaceholder w3-padding-small" id="machine-details" style="grid-column-start: 1; grid-column-end: 5;" >
+    </div> 
+  
+    <div class="w3-container w3-padding-small div_buttons">
+      <!-- Define bottom row -->
+      <div class="btn_center" style="grid-column-start: 1; grid-column-end: 1;">
+        <button 
+          title="Copy machine details into ticket"
+          class="c-btn c-btn--icon undefined undefined material-icons md-18"
+          id="btn_copy"
+          onClick="CopyMachineDetails()"
+          disabled
+          > 
+          content_copy <!-- This us the icon name to show on button-->                    
+        </button> 
+      </div>      
+      <div class="btn_center" style="grid-column-start: 2; grid-column-end: 2;">  
+        <button 
+          title="Open remote diagnistics window"
+          class="c-btn c-btn--icon undefined undefined material-icons md-18"
+          id="btn_diagnostics"
+          onClick="StartDiagnostics()"
+          disabled
+          > 
+          monitor_heart            
+        </button> 
+      </div>  
+      <div class="btn_center" style="grid-column-start: 3; grid-column-end: 3;">
+        <button 
+          title="Show device location on map"
+          class="c-btn c-btn--icon undefined undefined material-icons md-18"
+          id="btn_map"
+          onClick="OpenMap()"
+          disabled
+          > 
+          map            
+        </button>        
+      </div> 
+      <div class="btn_center" style="grid-column-start: 4; grid-column-end: 4;">
+        <button 
+          title="Open configuration window"
+          class="c-btn c-btn--icon undefined undefined c-btn--danger material-icons md-18"
+          id="btn_config"
+          onClick="OpenConfig()"
+          > 
+          tune            
+        </button>        
+      </div> 
+    </div>
+  </form>
+  
+  <script src="https://assets.zendesk.com/apps/sdk/2.0/zaf_sdk.js"></script>
+  <script>
+
+  // Initialise Apps framework client. See also:    
+  var client = ZAFClient.init();
+  client.invoke('resize', { width: '100%', height: '400px' });
+  var machine_number_field, account_manager_field, contract_version_field, first_run_performed;
+  var localSerialNumber, localRegistrationNumber, localMachineModel, localAccountManager, localContractVersion;
+
+
+  client.on("app.registered", function(e) {
+    // Check for existing data from Sunshine DB
+    CheckForExistingData();
+
+    // Load field ID from required field 
+    client.get('requirement:machine_number').then(data => {
+      machine_number_field = data['requirement:machine_number'].requirement_id;
+
+      // Get search value from ticket
+      client.get("ticket.customField:custom_field_" + machine_number_field).then(function(result) {
+        document.getElementById("search_term").value = result["ticket.customField:custom_field_" + machine_number_field];
+
+        // Trigger the initial search after the app has been loaded
+        if (document.getElementById("search_term").value != ''){
+          searchObject();
+        } 
+        else {
+          let objects = '';
+          objects =`
+          <div class="noMachineSearch">
+            <img src="404.svg" height="60px" />
+            <p>Enter Machine Serial Number above and hit -Enter- to start search</p>
+          </div>`;
+          document.getElementById('machine-details').innerHTML = objects;
+        }
+      }); 
+    });
+
+    // Load field ID from required field 
+    client.get('requirement:machine_AE').then(data => {
+      account_manager_field = data['requirement:machine_AE'].requirement_id;
+    });
+
+    // Load field ID from required field 
+    client.get('requirement:machine_service_contract').then(function(data) {
+      contract_version_field = data['requirement:machine_service_contract'].requirement_id;
+    });
+
+    // Execute search when ENTER is pressed in search input
+    var searchTerm = document.getElementById('search_term');
+    searchTerm.addEventListener('keydown', (event) => {
+      let keycode = (event.keyCode ? event.keyCode : event.which);
+      if(event.keycode == '13') {
+        searchObject()
+      };
+    });
+  });   
+
+
+  // Search for the object based on input value
+  function searchObject() {
+    var serialNumber = document.getElementById("search_term").value;
+    let query = JSON.stringify({"query":{"serial_number":{"$contains":`${serialNumber}`}}});
+    const searchObject = {url: `/api/sunshine/objects/query`,method:'POST',data: query,httpCompleteResponse:true,dataType:'json'};
+    client.request(searchObject).then(
+      function(response) {
+        let responseAll = JSON.parse(response.responseText);
+        let objectData = responseAll["data"];
+        if (objectData.length == 0) {
+          renderResult('');
+        } else {
+          renderResult(objectData[0].attributes);
+        }
+      
+      });
+  };
+
+  // Render Result within App's iFrame
+  function renderResult(result) {
+    let objects = '';
+    if (result == '') {
+      localSerialNumber = '';
+      localMachineModel = '';
+      localRegistrationNumber = '';
+      localAccountManager = '';
+      localContractVersion = '';
+
+      objects =`
+        <div class="noMachine">
+          <img src="404.svg" height="60px" />
+          <p class="kale">
+            No machine found
+          </p>
+        </div>`;
+      document.getElementById("btn_copy").disabled = true;
+      document.getElementById("btn_diagnostics").disabled = true;
+      document.getElementById("btn_map").disabled = true;
+    } else {
+      localSerialNumber = result["serial_number"];
+      localAccountManager = result["primary_account_manager"];
+      localContractVersion = result["contract_version"];
+      localRegistrationNumber = result["registration_number"];
+      localMachineModel = result["model"];
+
+      objects +=`
+      <strong class="c-callout__title" style="text-align: center">
+        Machine Details
+      </strong>
+      <table class="w3-table-all w3-small" id="found_device">        
+          <tr><td class="MachineDetailsTitle">Serial Number</td><td >${result["serial_number"]}</td></tr>
+          <tr><td class="MachineDetailsTitle">Registration Number</td><td>${result["registration_number"]}</td></tr>
+          <tr><td class="MachineDetailsTitle">Machine Model</td><td>${result["model"]}</td></tr>
+          <tr><td class="MachineDetailsTitle">Primary Account Manager</td><td>${result["primary_account_manager"]}</td></tr>        
+          <tr><td class="MachineDetailsTitle">Contract Type</td><td>${result["contract_type"]}</td></tr>
+          <tr><td class="MachineDetailsTitle">Contract Version</td><td>${result["contract_version"]}</td></tr>
+          <tr><td class="MachineDetailsTitle">Contract Status</td>`;
+        
+          // Check if contract is valid
+          if (result["contract_status"] == "Active") {
+            objects += `<td style="color:#009C18">Active</td>`
+            } else {
+              objects += `<td style="color:#8D0909">Not Active</td>`
+          };
+        
+        objects +=
+          `</tr>
+        </table>`;
+      document.getElementById("btn_copy").disabled = false;
+      document.getElementById("btn_diagnostics").disabled = false;
+      document.getElementById("btn_map").disabled = false;
+    }
+    document.getElementById('machine-details').innerHTML = objects;
+  };
+
+
+  function CopyMachineDetails(){
+      client.set('ticket.customField:custom_field_' + machine_number_field, localSerialNumber);
+      client.set('ticket.customField:custom_field_' + account_manager_field, localAccountManager);
+      client.set('ticket.customField:custom_field_' + contract_version_field, localContractVersion);
+  }; 
+
+  function CheckForExistingData(){
+    const searchObject = {url: `/api/sunshine/objects/records?type=machine_details`,method:'GET',httpCompleteResponse:true};
+    client.request(searchObject).then(
+      function(response) {
+        let responseAll = JSON.parse(response.responseText);
+        let objectData = responseAll["data"];
+        if (objectData.length == 0){
+            PerformFirstRun();
+        }        
+      });
+  };
+
+  function PerformFirstRun(){
+    // Set machines to use
+    let machines = [
+      {
+            "type": "machine_details",
+            "attributes": {
+                "serial_number": "1234",
+                "registration_number": "RA-9769G",
+                "model": "Bombardier G7500",
+                "primary_account_manager": "Steve Smith",
+                "contract_type": "CorporateCare Enhanced",
+                "contract_version": "v5.2 English Law BR710",
+                "contract_status": "true"
+            }
+        },
+        {
+            "type": "machine_details",
+            "attributes": {
+                "serial_number": "2345",
+                "registration_number": "T7-ACE",
+                "model": "Bombardier G5000",
+                "primary_account_manager": "Ken Shou",
+                "contract_type": "CorporateCare Enhanced",
+                "contract_version": "v5.2 English Law BR710",
+                "contract_status": "true"                
+            }
+        }
+    ];
+    machines.forEach(data =>{
+      // Store Data into Sunshine table
+      let query = JSON.stringify({data});
+      const insertObject = {url: `/api/sunshine/objects/records`,method:'POST',data: query,httpCompleteResponse:true,dataType:'json'};
+      client.request(insertObject).then()
+    });
+  };
+
+  async function OpenConfig(){
+    await client.invoke("instances.create", {
+      location: "modal",
+      url: `assets/config.html?client=${client}`,
+      size: {
+        width: "70vw",
+        height: "72vh",
+      },
+    });
+  };
+
+  async function OpenMap(){
+    await client.invoke("instances.create", {
+      location: "modal",
+      url: `assets/show_location.html`,
+      size: {
+        width: "50vw",
+        height: "50vh",
+      },
+    });
+  };
+
+ async function StartDiagnostics() {   
+    await client.invoke("instances.create", {
+      location: "modal",
+      url: `assets/check_device.html?serialnumber=${localSerialNumber}&registrationnumber=${localRegistrationNumber}&machinemodel=${localMachineModel}`,
+      size: {
+        width: "30vw",
+        height: "80vh",
+      },
+    });
+  };
+
+</script>
+</body>
+</html>

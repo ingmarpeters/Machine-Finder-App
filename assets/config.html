@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <!--   See Using Zendesk Garden:
+    https://developer.zendesk.com/apps/docs/developer-guide/setup#using-zendesk-garden
+    https://garden.zendesk.com/css-components/bedrock/
+    https://garden.zendesk.com/css-components/utilities/typography/
+   -->
+   <link
+   rel="stylesheet"
+   href="https://cdn.jsdelivr.net/combine/npm/@zendeskgarden/css-bedrock@9.0.0,npm/@zendeskgarden/css-utilities@4.3.0,npm/@zendeskgarden/css-forms@7.0.21,npm/@zendeskgarden/css-buttons@8.0.1,npm/@zendeskgarden/css-menus@9.0.9,npm/@zendeskgarden/css-tooltips@4.1.18,npm/@zendeskgarden/css-arrows@3.1.1"
+  />
+  <link 
+  rel="stylesheet" 
+  href="https://www.w3schools.com/w3css/4/w3.css"
+  />
+  <link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/icon?family=Material+Icons"
+  />
+</head>
+<style>
+  .table {
+    width: auto;
+    max-width: 100%;
+    border-collapse: collapse;
+  }
+ </style>
+<body>
+    <div class="w3-container w3-padding-small">
+        <div class="w3-row-padding">
+            <div class="col u-mt">
+                <div class="c-callout undefined undefined undefined">
+                    <strong class="c-callout__title">
+                        Description
+                    </strong>
+                    <p>
+                      This app allows you to search for a serial number and to import details to a ticket. Please make sure that all of the fields the app has created are linked to the form you are working with. <br>
+                      You may add as many new machines as you want to the underlying Sunshine Objects table. Serial numbers are unique. If the number already exists, adding a Machine will update an existing one.<br>
+                      <br>
+                      Before you uninstall the App, make sure to remove all entries and not to open the app again. 
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div> 
+    <hr> 
+    <div class="w3-container w3-padding-small">
+        <div class="w3-row-padding">
+            <div class="c-callout undefined undefined undefined">
+                <strong class="c-callout__title">
+                    List of available machines
+                </strong>
+            </div>
+        </div>
+        <div class="w3-row-padding" style="margin-bottom: 10px; margin-top: 10px;">
+            <table class="w3-table-all" id="machine_table"> 
+                <tr>
+                    <th style="font-weight: bold;">Serial Number</th>
+                    <th style="font-weight: bold;">Registration Number</th>
+                    <th style="font-weight: bold;">Model</th>
+                    <th style="font-weight: bold;">Sunshine ID</th>
+                    <th style="font-weight: bold;">Action</th>
+                </tr>
+            </table>
+        </div>
+        <div class="w3-row-padding">
+            <button 
+                class="c-btn undefined"
+                id="btn_remove"
+                onClick="RemoveAllMachines()"
+                >
+                Remove All
+        </div>
+    </div>
+    <hr>
+    <div class="w3-container w3-padding-small">
+        <div class="w3-row-padding">
+            <div class="c-callout undefined undefined undefined">
+                <strong class="c-callout__title">
+                    Add a new machine:
+                </strong>
+            </div>
+        </div>
+        <div class="w3-row-padding" style="padding-left: 0px;">
+            <div class="col w3-quarter">
+                    <label class="c-txt__label" for="txt-type-number">
+                    Serial Number<br>
+                  </label>
+                  <span class="c-txt__hint c-txt__hint--sm">
+                    This is the serial number you will search for. This will be copied to the ticket.
+                  </span>
+            </div>
+            <div class="col w3-quarter">
+                    <label class="c-txt__label" for="text">
+                        Registration Number<br>
+                    </label>
+                    <span class="c-txt__hint c-txt__hint--sm">
+                        Additional details on the machine.
+                      </span>
+            </div>
+            <div class="col w3-quarter">
+                <label class="c-txt__label" for="text">
+                    Model<br>
+                </label>
+                <span class="c-txt__hint c-txt__hint--sm">
+                    The model of the machine you enter.
+                  </span>
+            </div>
+            <div class="col w3-quarter">
+                <label class="c-txt__label" for="text">
+                    Primary Account Manager<br>
+                </label>
+                <span class="c-txt__hint c-txt__hint--sm">
+                    Primary account manager's name. This will be copied to the ticket.
+                  </span>
+            </div>
+        </div>
+        <div class="w3-row-padding" style="padding-left: 0px;">
+            <div class="col w3-quarter">
+                  <input class="c-txt__input" id="serial_number" placeholder="Serial Number" required type="number" />
+            </div>
+            <div class="col w3-quarter">
+                    <input class="c-txt__input" id="registration_number" placeholder="Registration Number" required type="text" />
+            </div>
+            <div class="col w3-quarter">
+                <input class="c-txt__input" id="model" placeholder="Model" required type="text" />
+            </div>
+            <div class="col w3-quarter">
+                <input class="c-txt__input" id="primary_account_manager" placeholder="Primary Account Manager" required type="text" />
+            </div>
+        </div>
+        <div class="w3-row-padding" style="padding-left: 0px;">
+            <div class="col w3-quarter">
+                <label class="c-txt__label" for="text">
+                    Contract Type<br>
+                </label>
+                <span class="c-txt__hint c-txt__hint--sm">
+                    A maintenance contract type.
+                  </span>
+            </div>
+            <div class="col w3-quarter">
+                <label class="c-txt__label" for="text">
+                    Contract Version<br>
+                </label>
+                <span class="c-txt__hint c-txt__hint--sm">
+                    A version of the maintenance contract.
+                  </span>
+            </div>
+            <div class="col w3-quarter">
+                <label class="c-txt__label" for="text">
+                    Contract Status<br>
+                </label>
+                <span class="c-txt__hint c-txt__hint--sm">
+                    The status of the maintenance contract. If "active", the status will be shown in green.
+                  </span>
+            </div>
+        </div>
+        <div class="w3-row-padding" style="padding-left: 0px;">
+            <div class="col w3-quarter">
+                <input class="c-txt__input" id="contract_type" placeholder="Contract Type" required type="text" />
+            </div>
+            <div class="col w3-quarter">
+                <input class="c-txt__input" id="contract_version" placeholder="Contract Version" required type="text" />
+            </div>
+            <div class="col w3-quarter">
+                <select class="c-txt__input c-txt__input--select undefined undefined c-txt__input--undefined undefined" id="contract_status" placeholder="Active" required>
+                    <option>Active</option>
+                    <option>Not Active</option>
+              </select>
+            </div>
+        </div>
+        <div class="w3-row-padding" style="padding-left: 0px;">
+            <div class="col w3-quarter">
+                <button 
+                    class="c-btn c-btn undefined"
+                    id="btn_add_machine"
+                    onClick="AddMachineToTable()"
+                    style="margin-top: 10px;"
+                    >
+                    Add Machine
+            </div>
+        </div>
+    </div>
+
+<script src="https://assets.zendesk.com/apps/sdk/2.0/zaf_sdk.js"></script>
+<script> 
+    // Initialise Apps framework client. See also:    
+    var client_config = ZAFClient.init();
+
+    //InitializeTable();
+    DisplayAllEntries();
+
+
+    function InitializeTable(){
+        var myTableHTMLCode = ""
+
+        myTableHTMLCode += 
+        `<tr>
+            <th style="font-weight: bold;">Serial Number</th>
+            <th style="font-weight: bold;">Registration Number</th>
+            <th style="font-weight: bold;">Model</th>
+            <th style="font-weight: bold;">Sunshine ID</th>
+            <th style="font-weight: bold;">Action</th>
+        </tr>`;
+        document.getElementById('machine_table').innerHTML = myTableHTMLCode;
+    }
+
+    function DisplayAllEntries(){       
+        // Delete all entries
+        var myTableHTMLCode = ""
+
+        myTableHTMLCode += 
+        `<tr>
+            <th style="font-weight: bold;">Serial Number</th>
+            <th style="font-weight: bold;">Registration Number</th>
+            <th style="font-weight: bold;">Model</th>
+            <th style="font-weight: bold;">Sunshine ID</th>
+            <th style="font-weight: bold;">Action</th>
+        </tr>`;
+        document.getElementById('machine_table').innerHTML = myTableHTMLCode;
+
+        const searchObject = {url: `/api/sunshine/objects/records?type=machine_details`,method:'GET',httpCompleteResponse:true};
+        client_config.request(searchObject).then(
+          function(response) {
+            let responseAll = JSON.parse(response.responseText);
+            let objectData = responseAll["data"];
+            if (objectData.length != 0){
+                var table = document.getElementById("machine_table");
+                responseAll["data"].forEach(myData => {        
+                    AddLineToTable(myData.attributes["serial_number"], myData.attributes["registration_number"], myData.attributes["model"], myData.id);       
+                });
+            }
+          });
+    };
+
+    function AddLineToTable(serialNumber, registrationNumber, model, sunshineID){
+        // Get table details
+        var table = document.getElementById("machine_table")
+        var numberRows = table.rows.lenth;
+
+        var row = table.insertRow(numberRows);
+        var cell0 = row.insertCell(0);
+        var cell1 = row.insertCell(1);
+        var cell2 = row.insertCell(2);
+        var cell3 = row.insertCell(3);
+        var cell4 = row.insertCell(4);
+        cell0.innerHTML = serialNumber;
+        cell1.innerHTML = registrationNumber;
+        cell2.innerHTML = model;
+        cell3.innerHTML = sunshineID;
+        myHTMLCode = 
+        `<button 
+            class="c-btn c-btn--icon undefined material-icons md-18"
+            id="btn_delete_machine"
+            onClick="RemoveMachineFromSunshineTable('`;
+            myHTMLCode += sunshineID;
+            myHTMLCode += 
+        `')"
+            >
+            delete_forever
+        `;
+        cell4.innerHTML = myHTMLCode;
+    };
+
+    function RemoveMachineFromSunshineTable(objectID){
+        const deleteObject = {url: `/api/sunshine/objects/records/${objectID}`,method:'DELETE',httpCompleteResponse:true};
+        client_config.request(deleteObject).then(function(response) {
+            DisplayAllEntries();  
+        });          
+    };
+
+    function RemoveAllMachines(){       
+        const searchObject = {url: `/api/sunshine/objects/records?type=machine_details`,method:'GET',httpCompleteResponse:true};
+        client_config.request(searchObject).then(
+          function(response) {
+            let responseAll = JSON.parse(response.responseText);
+            let objectData = responseAll["data"];
+            if (objectData.length != 0){
+                responseAll["data"].forEach(myData => {    
+                    var objectId = myData.id;
+                    const deleteObject = {url: `/api/sunshine/objects/records/${objectId}`,method:'DELETE',httpCompleteResponse:true};
+                    client_config.request(deleteObject).then(function(response) {
+                        DisplayAllEntries();
+                    });
+                });
+            };
+          });
+    };
+
+    function AddMachineToTable(){
+        // Get Date from fields
+        let SerialNumber = document.getElementById("serial_number").value;
+        let RegistrationNumber = document.getElementById("registration_number").value; 
+        let Model = document.getElementById("model").value; 
+        let PrimaryAccountManager = document.getElementById("primary_account_manager").value; 
+        let ContractType = document.getElementById("contract_type").value; 
+        let ContractVersion = document.getElementById("contract_version").value; 
+        let ContractStatus = document.getElementById("contract_status").value; 
+        
+        // Check of any value is empty
+        if (SerialNumber != "" && RegistrationNumber != "" && Model != "" && PrimaryAccountManager != "" && ContractType != "" && ContractVersion != "") {
+            // Check if SerialNumber already exists in Sunshine table
+            let query = JSON.stringify({"query":{"serial_number":{"$contains":`${SerialNumber}`}}});
+            const searchObject = {url: `/api/sunshine/objects/query`,method:'POST',data: query,httpCompleteResponse:true,dataType:'json'};
+            client_config.request(searchObject).then(
+            function(response) {
+                    let responseAll = JSON.parse(response.responseText);
+                    let objectData = responseAll["data"];
+                    if (objectData.length == 0) {
+                        // Object does not exists, thus an insert can be done
+                        InsertDataIntoTable(SerialNumber, RegistrationNumber, Model, PrimaryAccountManager, ContractType, ContractVersion, ContractStatus)
+                    } else {
+                        // Object exists, thus create an update
+                        UpdateExistingDataLineInTable(SerialNumber, RegistrationNumber, Model, PrimaryAccountManager, ContractType, ContractVersion, ContractStatus, objectData[0].id)
+                    }
+            });
+        };
+    }
+    
+    function InsertDataIntoTable(SerialNumber, RegistrationNumber,Model,PrimaryAccountManager, ContractType, ContractVersion, ContractStatus){
+        let query = StringifyMyQuery(SerialNumber, RegistrationNumber,Model,PrimaryAccountManager, ContractType, ContractVersion, ContractStatus);
+        const insertObject = {url: `/api/sunshine/objects/records`,method:'POST',data: query,httpCompleteResponse:true,dataType:'json'};
+        client_config.request(insertObject).then(response => {
+            ResetInputDataFields();
+            InitializeTable();
+            DisplayAllEntries();
+        });
+    }
+
+    function UpdateExistingDataLineInTable(SerialNumber, RegistrationNumber,Model,PrimaryAccountManager, ContractType, ContractVersion, ContractStatus, SunshineId){
+        let query = StringifyMyQuery(SerialNumber, RegistrationNumber,Model,PrimaryAccountManager, ContractType, ContractVersion, ContractStatus);
+        const updateObject = {url: `/api/sunshine/objects/records/${SunshineId}`,method:'PATCH',data: query,httpCompleteResponse:true,contentType:'application/merge-patch+json',dataType:'json'};
+        client_config.request(updateObject).then(response => {
+            ResetInputDataFields();
+            InitializeTable();
+            DisplayAllEntries();
+        });
+    }
+
+    function ResetInputDataFields(){
+        document.getElementById("serial_number").value = "";
+        document.getElementById("registration_number").value  = "";
+        document.getElementById("model").value = ""; 
+        document.getElementById("primary_account_manager").value = "";
+        document.getElementById("contract_type").value = "";
+        document.getElementById("contract_version").value = ""; 
+        document.getElementById("contract_status").value = "Active";
+    };
+
+    function StringifyMyQuery(SerialNumber, RegistrationNumber,Model,PrimaryAccountManager, ContractType, ContractVersion, ContractStatus) {
+        let query = JSON.stringify(
+            {
+                "data":
+                    {
+                        "type": "machine_details",
+                        "attributes": {
+                            "serial_number":`${SerialNumber}`,
+                            "registration_number":`${RegistrationNumber}`,
+                            "model":`${Model}`,
+                            "primary_account_manager":`${PrimaryAccountManager}`,
+                            "contract_type":`${ContractType}`,
+                            "contract_version":`${ContractVersion}`,
+                            "contract_status":`${ContractStatus}`
+                        }
+                    }
+            }
+        );
+        return query;
+    }
+
+
+
+
+</script>
+
+</body>
+</html>

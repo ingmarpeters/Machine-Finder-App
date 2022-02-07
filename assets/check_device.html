@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <!--   See Using Zendesk Garden:
+    https://developer.zendesk.com/apps/docs/developer-guide/setup#using-zendesk-garden
+    https://garden.zendesk.com/css-components/bedrock/
+    https://garden.zendesk.com/css-components/utilities/typography/
+   -->
+   <link
+   rel="stylesheet"
+   href="https://cdn.jsdelivr.net/combine/npm/@zendeskgarden/css-bedrock@9.0.0,npm/@zendeskgarden/css-utilities@4.3.0,npm/@zendeskgarden/css-forms@7.0.21,npm/@zendeskgarden/css-buttons@8.0.1,npm/@zendeskgarden/css-menus@9.0.9,npm/@zendeskgarden/css-tooltips@4.1.18,npm/@zendeskgarden/css-arrows@3.1.1"
+  />
+  <link 
+  rel="stylesheet" 
+  href="https://www.w3schools.com/w3css/4/w3.css"
+  />
+</head>
+<style>
+  .table {
+    width: auto;
+    max-width: 100%;
+    border-collapse: collapse;
+  }
+
+    /* Center the loader */
+  #loader {
+    position: absolute;
+    left: 50%;
+    top: 20%;
+    z-index: 1;
+    width: 120px;
+    height: 120px;
+    margin: -76px 0 0 -76px;
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #3498db;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+  }
+
+  @-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+    /* Add animation to "page content" */
+  .animate-bottom {
+    position: relative;
+    -webkit-animation-name: animatebottom;
+    -webkit-animation-duration: 1s;
+    animation-name: animatebottom;
+    animation-duration: 1s
+  }
+
+  @-webkit-keyframes animatebottom {
+    from { bottom:-100px; opacity:0 } 
+    to { bottom:0px; opacity:1 }
+  }
+
+  @keyframes animatebottom { 
+    from{ bottom:-100px; opacity:0 } 
+    to{ bottom:0; opacity:1 }
+  }
+
+  #myDiv {
+    display: none;
+  }  
+ </style>
+</head>
+
+
+<body onload="myFunction()" style="margin:0;">
+<script>
+var myVar;
+var mySerialNumber;
+var myRegistrationNumber;
+var myMachineModel;
+
+
+function myFunction() {
+  myVar = setTimeout(showPage, 2000);
+  
+  const urlParams = new URLSearchParams(window.location.search)
+  this.mySerialNumber = urlParams.get('serialnumber');
+  this.myRegistrationNumber = urlParams.get('registrationnumber');
+  this.myMachineModel = urlParams.get('machinemodel');
+}
+
+function showPage() {
+  document.getElementById("loader").style.display = "none";
+
+  // Add values to Table
+  document.getElementById("serial_number").innerHTML = mySerialNumber;
+  document.getElementById("registration_number").innerHTML = myRegistrationNumber;
+  document.getElementById("machine_model").innerHTML = myMachineModel;
+
+
+  document.getElementById("myDiv").style.display = "block";
+}
+</script>
+
+
+<div id="loader"></div>
+
+<div style="display:none;" id="myDiv" class="animate-bottom">
+
+<div class="w3-container w3-padding-small">
+  <div class="c-callout undefined undefined undefined">
+    <strong class="c-callout__title">
+    Recommendation
+    </strong>
+    <p style="text-align: center; font-weight: bold; font-size: 20px; color: red;">
+      Replace Device
+    </p>
+  </div>
+
+  <hr>
+
+  <div class="c-callout undefined undefined undefined">
+    <strong class="c-callout__title">
+    Device Information
+    </strong>
+    <table class="w3-table-all w3-small" id="device_information"> 
+      <tr>
+        <td>Serial Number</td>
+        <td id="serial_number"></td>
+      </tr>
+      <tr>
+        <td>Registration Number</td>
+        <td id="registration_number"></td>
+      </tr>
+      <tr>
+        <td>Machine Model</td>
+        <td id="machine_model"></td>
+      </tr>          
+      <tr>
+        <td>Memory</td>
+        <td>2 Gigaybyte</td>
+      </tr>          
+      <tr>
+        <td>OS Name and Version</td>
+        <td>Zendesk Integrated OS v0.1</td>
+      </tr>
+      <tr>
+        <td>IP Address</td>
+        <td>127.0.0.1</td>
+      </tr>        
+    </table>
+  </div> 
+
+  <hr> 
+
+  <div class="c-callout undefined undefined undefined">
+    <strong class="c-callout__title">
+      Ping Result
+      </strong>
+      <p id="pingresult" style="font-size: small;"> 
+        PING 127.0.0.1 (127.0.0.1): 56 data bytes<br>
+        64 bytes from 127.0.0.1: icmp_seq=2 ttl=64 time=0.245 ms<br>
+        64 bytes from 127.0.0.1: icmp_seq=3 ttl=64 time=0.188 ms<br>
+        64 bytes from 127.0.0.1: icmp_seq=4 ttl=64 time=0.190 ms<br><br>
+
+        --- 127.0.0.1 ping statistics ---<br>
+        3 packets transmitted, 3 packets received, 0.0% packet loss<br>
+        round-trip min/avg/max/stddev = 0.082/0.180/0.245/0.053 ms<br>
+    </p>
+  </div>
+  
+  <hr>
+  
+  <div class="c-callout undefined undefined undefined">
+    <strong class="c-callout__title">
+    Device Analysis
+    </strong>
+    <table class="w3-table-all w3-small" id="device_analysis"> 
+      <tr>
+        <td>Display</td>
+        <td style="color: green;">OK</td>
+      </tr>
+      <tr>
+        <td>Input Device</td>
+        <td style="color: green;">OK</td>
+      </tr>
+      <tr>
+        <td>Network</td>
+        <td style="color: green;">OK</td>
+      </tr>          
+      <tr>
+        <td>Memory</td>
+        <td style="color: green;">OK</td>
+      </tr>          
+      <tr>
+        <td>IC Motorola 8080</td>
+        <td style="color: green;">OK</td>
+      </tr>
+      <tr>
+        <td>IC Motorola 8083</td>
+        <td style="color: green;">OK</td>
+      </tr> 
+      <tr>
+        <td>EFR32BG21 Series 2 Bluetooth SoCs</td>
+        <td style="color: red;">Not OK</td>
+      </tr>             
+    </table>
+  </div>  
+</div>
+
+</body>
+</html>

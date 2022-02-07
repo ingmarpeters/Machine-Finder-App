@@ -1,0 +1,9 @@
+{
+  "app": {
+    "name": "Machine Finder",
+    "short_description": "Find your machine (Engine/Plane/Excavator) from Zendesk Sunshine entries.",
+    "long_description": "Find you machine and related details like contacts or service contracts and copy details into the ticket.",
+    "installation_instructions": "Simply install."
+  }
+}
+

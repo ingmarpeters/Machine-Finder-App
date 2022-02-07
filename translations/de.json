@@ -1,0 +1,8 @@
+{
+  "app": {
+    "name": "Machine Finder",
+    "short_description": "Suche nach Großmaschinenen (Motor/Flugzeug/Großbagger) innerhalb von Zendesk Sunshine Einträgen.",
+    "long_description": "Ermittle Details zu gesuchen Maschinene und kopiere Details, wie Kontaktperson oder Service Vertrag, in das Ticket. ",
+    "installation_instructions": "Einfach Installieren."
+  }
+}

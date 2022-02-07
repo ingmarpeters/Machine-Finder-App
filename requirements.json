@@ -1,0 +1,74 @@
+{
+   "ticket_fields": {
+       "machine_number":{
+           "type": "text",
+           "title": "Machine Serial Number",
+           "description": "This field is used for Machinery Finder App to store machine serial number in a ticket."
+       },
+       "machine_AE":{
+           "type": "text",
+           "title": "Machine Account Manager",
+           "description": "This field is used for Machinery Finder App to store case Company's Account Manager in a ticket."
+       },
+       "machine_service_contract":{
+        "type": "text",
+        "title": "Machine Service Contract",
+        "description": "This field is used for Machinery Finder App to store case Company's Account Manager in a ticket."
+    }
+   },
+   "custom_objects": {
+     "custom_object_types": [
+       {
+       "key": "machine_details",
+       "schema": {
+           "properties": {
+            "serial_number": {
+                "type": "string",
+                "description": "The serial number of the machine.",
+                "title":"Serial Number"
+              },
+            "registration_number": {
+                "type": "string",
+                "description": "The registration number of the machine",
+                "title":"Registration Number"
+              },
+            "model": {
+                "type": "string",
+                "description": "The machine's model (for example: plane, engine, etc.).",
+                "title":"Model"
+              },
+            "primary_account_manager": {
+                "type": "string",
+                "description": "The primary account manager, representing the company and responsible for the machine.",
+                "title":"Primary Account Manager"
+              },
+            "contract_type": {
+                "type": "string",
+                "description": "The contract type used for the machine.",
+                "title":"Contract Type"
+              },
+            "contract_version": {
+                "type": "string",
+                "description": "Current contract version.",
+                "title":"Contract Version"
+              },
+            "contract_status": {
+                "type": "string",
+                "description": "Current contract status.",
+                "title":"Contract Status"
+              }
+           },
+           "required":[
+                "serial_number",
+                "registration_number",
+                "model",
+                "primary_account_manager",
+                "contract_type",
+                "contract_version",
+                "contract_status"
+           ]
+       }
+   }
+  ]
+}
+}
