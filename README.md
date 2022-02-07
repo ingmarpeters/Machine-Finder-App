@@ -11,17 +11,18 @@ The App allows you to show the following use-cases to your customer during a dem
 From an admin perspective you may add as many machines/devices as you want. All machines will be stored in a Sunshine table in your Zendesk instance. 
 
 
-## Functional Details:
+## Functional Details
 
-# Search Device
+### Search Device
 
-# Copy Details to Ticket
+### Copy Details to Ticket
 
-# Remote Diagnostics
+### Remote Diagnostics
 
-# Remote Diagnostics
+### Remote Diagnostics
 
 ## Demo
+See a working demo.
 
 
 ## Change Log
