@@ -1,5 +1,6 @@
 # Machine Finder
 
+## Description
 The App allows you to show the following use-cases to your customer during a demo.
 
 - Search for a device in local database (sunshine)
@@ -10,15 +11,20 @@ The App allows you to show the following use-cases to your customer during a dem
 From an admin perspective you may add as many machines/devices as you want. All machines will be stored in a Sunshine table in your Zendesk instance. 
 
 
-### The following information is displayed:
+## Functional Details:
 
-* Search Device
-* Copy Details to Ticket
-* Remote Diagnostics
-* Remote Diagnostics
+# Search Device
+
+# Copy Details to Ticket
+
+# Remote Diagnostics
+
+# Remote Diagnostics
+
+## Demo
 
 
-Please submit bug reports to [Insert Link](). Pull requests are welcome.
+## Change Log
 
-### Screenshot(s):
-[put your screenshots down here.]
+### 2022-02-07
+First working version released
