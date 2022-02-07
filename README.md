@@ -7,6 +7,7 @@ Copy details from found machine to the ticket
 Emulate a Remote Diagnostics for the found machine
 Emulate a Locate Device on map for the found machine
 
+
 From an admin perspective you may add as many machines/devices as you want. All machines will be stored in a Sunshine table in your Zendesk instance. 
 
 
