@@ -3,18 +3,18 @@
 ## Description
 The App allows you to show the following use-cases to your customer during a demo.
 
-- Search for a device in local database (sunshine)
+- Search for a device in local database (Sunshine)
 - Copy details from found machine to the ticket
 - Emulate a Remote Diagnostics for the found machine
 - Emulate a Locate Device on map for the found machine
 
-From an admin perspective you may add as many machines/devices as you want. All machines will be stored in a Sunshine table in your Zendesk instance. 
+From an admin perspective, you may add as many machines/devices as you want. All machines will be stored in a Sunshine table in your Zendesk instance. 
 
 
 
 ## Functional Details
 ### Prerequisites
-The App stores data in a Sunshine table. The table will be created automatically upon installation. Every time the app runs, it will check whether there are objects stored in the tabel. If there are no objects stored, the app will create two default entries. 
+The App stores data in a Sunshine table. The table will be created automatically upon installation. Every time the app runs, it will check whether there are objects stored in the table. If there are no objects stored, the app will create two default entries. 
 
 <img src="Documentation/custom_objects.png" width=80% border=1/>
 <p>&#8203
@@ -32,7 +32,7 @@ The app uses your browser's location services for displaying a location on an Op
 ### Search Device
 
 #### New Ticket
-First time you open a ticket, you may search for a machine (stored in you Sunshine table). Machine details will be shown in a table.
+The frst time you open a ticket, you may search for a machine (stored in your Sunshine table). Machine details will be shown in a table.
 
 <img src="Documentation/search_result.png" width=50% border=1/>
 
@@ -46,7 +46,7 @@ If you have stored machine details in the ticket, those will be re-used. Next ti
 <p>&#8203
 
 ### Copy Details to Ticket
-You may copy details from the found machine table to the ticket you are working in. As mentioned above, the app uses three field to store the details. 
+You may copy details from the found machine table to the ticket you are working on. As mentioned above, the app uses three fields to store the details. 
 There is no configuration option for those fields as they come with the app.
 
 <img src="Documentation/ticket_fields.png" width=40% border=1/>
@@ -54,7 +54,7 @@ There is no configuration option for those fields as they come with the app.
 <p>&#8203
 
 ### Remote Diagnostics
-Remote diagnostics is a fake. Basically there is a small animation wich simulates a remote connection and analysis. After a few seconds the animation is being removed and the result is shown. There will always be a static part in the result and a dynamic one, which is based on the machine your have selected. 
+Remote diagnostics is a fake. Basically there is a small animation which simulates a remote connection and analysis. After a few seconds, the animation is being removed and the result is shown. There will always be a static part in the result and a dynamic one, which is based on the machine you have selected. 
 
 <img src="Documentation/remote_diagnostics.png" width=60% border=1/>
 <p>&#8203
@@ -63,7 +63,7 @@ Remote diagnostics is a fake. Basically there is a small animation wich simulate
 ### Locate Device
 The location of your device is a fake one. The app will use your browser's location and will show that on the map. Any device you open will show the same location and it might not even be your real one (depending on how you are online). 
 You get the idea behind this functionality. 
-For demo purposes you can open the location in a bigger browser window.  
+For demo purposes, you can open the location in a bigger browser window.  
 
 <img src="Documentation/location_map.png" width=90% border=1/>
 
@@ -74,7 +74,7 @@ For demo purposes you can open the location in a bigger browser window.
 
 ### Configuration
 As for any Zendesk app, you may want to limit access to it. Use default options to do that.
-Additionally, the app allows you to add or remove entries using the configuration option it provides. This enables you to make a more tailored presentation when using the app. You can only add machines/devices, but you cannot change menue names etc. 
+Additionally, the app allows you to add or remove entries using the configuration option it provides. This enables you to make a more tailored presentation when using the app. You can only add machines/devices, but you cannot change menu names, etc. 
 
 <img src="Documentation/configuration.png" width=90% border=1/>
 
@@ -87,7 +87,7 @@ Additionally, the app allows you to add or remove entries using the configuratio
 Before you try to uninstall the app, make sure there are **no entries in Sunshine's object table** used by the app. Since the app has created the table, it will also remove the table during uninstall. This can only be done for empty tables.
 The app allows you to remove all entries in the configuration dialog. Once you removed all entries, make sure that you don't open the app again (see Prerequisites section to understand why).
 
-Also be aware that all fields the app has created will be removed as well. 
+Also, be aware that all fields the app has created will be removed as well. 
 
 You may now uninstall the app!
 
