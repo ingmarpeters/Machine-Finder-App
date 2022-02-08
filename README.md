@@ -95,7 +95,7 @@ You may now uninstall the app!
 <hr>
 
 ## Demo
-See a working demo.
+See a working [demo](https://youtu.be/SYm8PhBbUvg).
 
 <p>&#8203
 <hr>
