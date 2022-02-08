@@ -97,8 +97,6 @@ You may now uninstall the app!
 ## Demo
 See a working demo.
 
-<video src="Documentation/demo.mp4" width=100%/>
-
 <p>&#8203
 <hr>
 
