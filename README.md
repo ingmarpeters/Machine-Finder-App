@@ -16,10 +16,10 @@ From an admin perspective you may add as many machines/devices as you want. All 
 
 ### Prerequisites
 The App stores data in a Sunshine table. The table will be created automatically upon installation. Every time the app runs, it will check whether there are objects stored in the tabel. If there are no objects stored, the app will create two default entries. 
-![Alt text](/Documentation/custom_objects?raw=true "Object Table")
+![Object Table](Documentation/custom_objects?raw=true "Object Table")
 
 For saving machine details into a ticket, the app also creates three fields that it used. Make sure you have those fields in any form you want to use.
-![Alt text](/Documentation/ticket_fields?raw=true "Ticket Fields")
+![Ticket Fields](Documentation/ticket_fields?raw=true "Ticket Fields")
 
 The app uses your browser's location services for displaying a location on an OpenStreetMap. Make sure you grant access when asked for it.
 
